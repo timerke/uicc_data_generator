@@ -1,0 +1,12 @@
+{
+    "commands": [
+        {
+            "name": "STATUS",
+            "CLA": "0x16",
+            "INS": "0x11",
+            "P1": "0xAA",
+            "P2": "0xAA",
+            "Le": "0x00"
+        }
+    ]
+}

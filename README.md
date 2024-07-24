@@ -1,2 +1,2 @@
 # uicc_data_generator
-Data generator for the standard UICC-Terminal interface
+Генератор данных для стандарта UICC-Terminal interface.
