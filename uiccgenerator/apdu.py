@@ -62,7 +62,7 @@ class APDU:
             supported_commands = ", ".join(self.commands.keys())
             raise IncorrectDataException(f"The command '{command_name}' is not supported. Available commands: {supported_commands}")
 
-    def _convert_values_to_int(self, command_data: Dict[str, Any]) -> None:
+    def _convert_command_data_to_int(self, command_data: Dict[str, Any]) -> None:
         """
         Method converts command fields to integer values.
         :param command_data: dictionary with fields of the command.
@@ -111,7 +111,7 @@ class APDU:
         :return: encoded command.
         """
 
-        self._convert_values_to_int(command_data)
+        self._convert_command_data_to_int(command_data)
         self._check_command_data(command_data)
         return self._encode_header(command_data) + self._encode_body(command_data)
 
