@@ -1,7 +1,6 @@
 import logging
-import os
-from typing import Any, Dict
 from . import utils as ut
+from .apdudecoder import APDUDecoder
 
 
 logger = logging.getLogger("uicc_generator")
@@ -10,8 +9,7 @@ logger = logging.getLogger("uicc_generator")
 class UICCGenerator:
 
     def __init__(self) -> None:
-        apdu_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "apdu.json")
-        self._apdu: Dict[str, Any] = ut.read_json(apdu_path)
+        self._apdu: APDUDecoder = APDUDecoder()
 
     def _decode_input_data(self, input_data) -> bytes:
         """
@@ -19,8 +17,11 @@ class UICCGenerator:
         :return:
         """
 
+        decoded_commands = []
         for command_data in input_data.get("commands", []):
             logger.info("Decode command '%s'", command_data["name"])
+            decoded_commands.append({"command": command_data["name"],
+                                     "bytes": self._apdu.decode_command(command_data)})
 
     def run(self, input_file: str, csv: bool) -> None:
         """

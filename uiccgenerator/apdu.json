@@ -22,7 +22,7 @@
         "body": {
             "Lc": {
                 "description": "Number of bytes in the command data field",
-                "length": [0, 1]
+                "length": 1
             },
             "Data": {
                 "description": "Command data string",
@@ -30,7 +30,7 @@
             },
             "Le": {
                 "description": "Maximum number of data bytes expected in response of the command",
-                "length": [0, 1]
+                "length": 1
             }
         }
     }
