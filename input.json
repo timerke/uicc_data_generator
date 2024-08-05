@@ -2,7 +2,7 @@
     "commands": [
         {
             "name": "STATUS",
-            "CLA": "0x16",
+            "CLA": "0xF2",
             "INS": "0x11",
             "P1": "0xAA",
             "P2": "0xAA",

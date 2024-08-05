@@ -1,6 +1,6 @@
 import logging
 from . import utils as ut
-from .apduencoder import APDUEncoder
+from .apdu import APDU
 
 
 logger = logging.getLogger("uicc_generator")
@@ -9,7 +9,7 @@ logger = logging.getLogger("uicc_generator")
 class UICCGenerator:
 
     def __init__(self) -> None:
-        self._apdu: APDUEncoder = APDUEncoder()
+        self._apdu: APDU = APDU()
 
     def _encode_input_data(self, input_data) -> bytes:
         """
@@ -17,11 +17,12 @@ class UICCGenerator:
         :return:
         """
 
-        decoded_commands = []
         for command_data in input_data.get("commands", []):
-            logger.info("Decode command '%s'", command_data["name"])
-            decoded_commands.append({"command": command_data["name"],
-                                     "bytes": self._apdu.encode_command(command_data)})
+            try:
+                encoded_command = self._apdu.encode_command(command_data)
+                logger.info("Encoded command: %s", encoded_command)
+            except Exception as exc:
+                logger.error("%s", exc)
 
     def run(self, input_file: str, csv: bool) -> None:
         """

@@ -1,36 +1,66 @@
 {
     "version": "1.0.0",
     "contents": {
-        "header": {
-            "CLA": {
-                "description": "Class of instruction",
-                "length": 1
+        "message_structure": {
+            "header": {
+                "CLA": {
+                    "description": "Class of instruction",
+                    "length": 1
+                },
+                "INS": {
+                    "description": "Instruction code",
+                    "length": 1
+                },
+                "P1": {
+                    "description": "Instruction parameter 1",
+                    "length": 1
+                },
+                "P2": {
+                    "description": "Instruction parameter 2",
+                    "length": 1
+                }
             },
-            "INS": {
-                "description": "Instruction code",
-                "length": 1
-            },
-            "P1": {
-                "description": "Instruction parameter 1",
-                "length": 1
-            },
-            "P2": {
-                "description": "Instruction parameter 2",
-                "length": 1
+            "body": {
+                "Lc": {
+                    "description": "Number of bytes in the command data field",
+                    "length": 1
+                },
+                "Data": {
+                    "description": "Command data string",
+                    "length": "Lc"
+                },
+                "Le": {
+                    "description": "Maximum number of data bytes expected in response of the command",
+                    "length": 1
+                }
             }
         },
-        "body": {
-            "Lc": {
-                "description": "Number of bytes in the command data field",
-                "length": 1
+        "cases": [
+            ["CLA", "INS", "P1", "P2"],
+            ["CLA", "INS", "P1", "P2", "Le"],
+            ["CLA", "INS", "P1", "P2", "Lc", "Data"],
+            ["CLA", "INS", "P1", "P2", "Lc", "Data", "Le"]
+        ],
+        "commands": {
+            "AUTHENTICATE": {
+                "INS": ["0x88", "0x89"],
+                "CLA": ["0X", "4X", "6X"]
             },
-            "Data": {
-                "description": "Command data string",
-                "length": "Lc"
+            "READ BINARY": {
+                "INS": "0xB0",
+                "CLA": ["0X", "4X", "6X"]
             },
-            "Le": {
-                "description": "Maximum number of data bytes expected in response of the command",
-                "length": 1
+            "READ RECORD": {
+                "INS": "0xB2",
+                "CLA": ["0X", "4X", "6X"]
+            },
+            "STATUS": {
+                "INS": "0xF2",
+                "CLA": ["8X", "CX", "EX"]
+            },
+            "TERMINAL CAPABILITY": {
+                "INS": "0xAA",
+                "CLA": ["8X", "CX", "EX"]
             }
         }
     }
