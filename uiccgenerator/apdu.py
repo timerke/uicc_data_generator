@@ -68,7 +68,8 @@ class APDU:
                                "will be replaced with the correct one '%s'", command_data["INS"], command_name,
                                self.commands[command_name]["INS"])
                 command_data["INS"] = self.commands[command_name]["INS"]
-
+        
+        command_data["name"] = command_name
 
     def _convert_command_data_to_int(self, command_data: Dict[str, Any]) -> None:
         """
@@ -121,6 +122,7 @@ class APDU:
 
         self._convert_command_data_to_int(command_data)
         self._check_command_data(command_data)
+        logger.info("'%s' command encoding...", command_data["name"])
         return self._encode_header(command_data) + self._encode_body(command_data)
 
 
