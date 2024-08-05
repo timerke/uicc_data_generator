@@ -1,7 +1,7 @@
 import argparse
 import sys
 from typing import Optional
-from uiccgenerator import UICCGenerator
+from uiccgenerator import set_logger, UICCGenerator
 
 
 def run(input_file: Optional[str], csv: bool) -> None:
@@ -25,6 +25,8 @@ def run_console(input_file: str, csv: bool) -> None:
 
 
 if __name__ == "__main__":
+    set_logger()
+
     parser = argparse.ArgumentParser(description="UICC data generator")
     parser.add_argument("--input", "-i", type=str, help="Path to the json file with command names and parameters")
     parser.add_argument("--csv", action="store_true", help="Output should be in CSV format")

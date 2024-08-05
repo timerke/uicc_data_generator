@@ -1,0 +1,37 @@
+{
+    "version": "1.0.0",
+    "contents": {
+        "header": {
+            "CLA": {
+                "description": "Class of instruction",
+                "length": 1
+            },
+            "INS": {
+                "description": "Instruction code",
+                "length": 1
+            },
+            "P1": {
+                "description": "Instruction parameter 1",
+                "length": 1
+            },
+            "P2": {
+                "description": "Instruction parameter 2",
+                "length": 1
+            }
+        },
+        "body": {
+            "Lc": {
+                "description": "Number of bytes in the command data field",
+                "length": [0, 1]
+            },
+            "Data": {
+                "description": "Command data string",
+                "length": "Lc"
+            },
+            "Le": {
+                "description": "Maximum number of data bytes expected in response of the command",
+                "length": [0, 1]
+            }
+        }
+    }
+}
