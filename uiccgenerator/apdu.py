@@ -61,6 +61,14 @@ class APDU:
         if command_name not in self.commands:
             supported_commands = ", ".join(self.commands.keys())
             raise IncorrectDataException(f"The command '{command_name}' is not supported. Available commands: {supported_commands}")
+        
+        if "name" in command_data and "INS" in command_data:
+            if command_name != self._get_command_name(command_data["INS"]):
+                logger.warning("Invalid instruction code '%s' specified for '%s' command. The incorrect value "
+                               "will be replaced with the correct one '%s'", command_data["INS"], command_name,
+                               self.commands[command_name]["INS"])
+                command_data["INS"] = self.commands[command_name]["INS"]
+
 
     def _convert_command_data_to_int(self, command_data: Dict[str, Any]) -> None:
         """
