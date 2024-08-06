@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 
 def set_logger(debug: bool = False) -> None:

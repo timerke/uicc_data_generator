@@ -43,24 +43,34 @@
         ],
         "commands": {
             "AUTHENTICATE": {
+                "description": "This function initiates the computation of authentication data by the UICC using a challenge sent from the terminal and a secret stored in the UICC.",
                 "INS": ["0x88", "0x89"],
-                "CLA": ["0X", "4X", "6X"]
+                "CLA": ["0X", "4X", "6X"],
+                "cases": [1, 3]
             },
             "READ BINARY": {
+                "description": "This function reads a string of bytes from the current transparent elementary file.",
                 "INS": "0xB0",
-                "CLA": ["0X", "4X", "6X"]
+                "CLA": ["0X", "4X", "6X"],
+                "cases": [1]
             },
             "READ RECORD": {
+                "description": "This function reads one complete record in the current linear fixed of cyclic elementary file.",
                 "INS": "0xB2",
-                "CLA": ["0X", "4X", "6X"]
+                "CLA": ["0X", "4X", "6X"],
+                "cases": [1]
             },
             "STATUS": {
+                "description": "This function returns information concerning the current directory or current application.",
                 "INS": "0xF2",
-                "CLA": ["8X", "CX", "EX"]
+                "CLA": ["8X", "CX", "EX"],
+                "cases": [0, 1]
             },
             "TERMINAL CAPABILITY": {
+                "description": "This function is used to inform the UICC about terminal capability.",
                 "INS": "0xAA",
-                "CLA": ["8X", "CX", "EX"]
+                "CLA": ["8X", "CX", "EX"],
+                "cases": [2]
             }
         }
     }
