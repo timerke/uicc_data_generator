@@ -24,10 +24,11 @@ class UICCGenerator:
             except Exception as exc:
                 logger.error("%s", exc)
 
-    def run(self, input_file: str, csv: bool) -> None:
+    def run(self, input_file: str, csv: bool, t0: bool) -> None:
         """
         :param input_file: path to the json file with command names and parameters;
-        :param csv: if True, then the output data should be output in CSV format.
+        :param csv: if True, then the output data should be output in CSV format;
+        :param t0: if True, then you need to use the character based transmission protocol.
         """
 
         input_data = ut.read_json(input_file)
