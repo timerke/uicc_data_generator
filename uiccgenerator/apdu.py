@@ -23,14 +23,26 @@ class APDU:
 
     @property
     def commands(self) -> Dict[str, Any]:
+        """
+        :return: dictionary describing supported commands.
+        """
+
         return self._json_data["commands"]
 
     @property
     def message_cases(self) -> List[List[str]]:
+        """
+        :return: list of all possible message cases.
+        """
+
         return self._json_data["cases"]
 
     @property
     def message_structure(self) -> Dict[str, Any]:
+        """
+        :return: dictionary describing message structure.
+        """
+
         return self._json_data["message_structure"]
 
     def __convert_instruction_codes_to_int(self) -> None:
@@ -110,7 +122,7 @@ class APDU:
 
     def _encode(self, message_case: List[str], command_data: Dict[str, Any]) -> bytes:
         """
-        :param message_case:
+        :param message_case: message case by which the command needs to be encoded;
         :param command_data: dictionary with fields of the command to be encoded.
         :return: encoded command body.
         """
@@ -144,8 +156,8 @@ class APDU:
 
     def _get_message_case_index(self, message_case: List[str]) -> int:
         """
-        :param message_case:
-        :return:
+        :param message_case: message case.
+        :return: number of the given message case (starts from 1).
         """
 
         return self.message_cases.index(message_case) + 1
@@ -153,7 +165,7 @@ class APDU:
     def encode_command(self, command_data: Dict[str, Any]) -> Tuple[bytes, int]:
         """
         :param command_data: dictionary with fields of the command to be encoded.
-        :return: encoded command.
+        :return: encoded command and message case number (starts from 1).
         """
 
         self._convert_command_data_to_int(command_data)
@@ -165,8 +177,8 @@ class APDU:
 
 def encode(message_case: List[str], fields: Dict[str, Any], command_data: Dict[str, Any]) -> bytes:
     """
-    :param message_case:
-    :param fields:
+    :param message_case: message case by which the command needs to be encoded;
+    :param fields: dictionary describing message structure;
     :param command_data: dictionary with fields of the command to be encoded.
     :return: encoded message.
     """
