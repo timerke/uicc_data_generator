@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from . import utils as ut
 
 
@@ -22,10 +22,6 @@ class APDU:
         self.__convert_instruction_codes_to_int()
 
     @property
-    def body(self) -> Dict[str, Any]:
-        return self._json_data["message_structure"]["body"]
-
-    @property
     def commands(self) -> Dict[str, Any]:
         return self._json_data["commands"]
 
@@ -34,8 +30,8 @@ class APDU:
         return self._json_data["cases"]
 
     @property
-    def header(self) -> Dict[str, Any]:
-        return self._json_data["message_structure"]["header"]
+    def message_structure(self) -> Dict[str, Any]:
+        return self._json_data["message_structure"]
 
     def __convert_instruction_codes_to_int(self) -> None:
 
@@ -48,13 +44,13 @@ class APDU:
             else:
                 command["INS"] = to_int(command["INS"])
 
-    def _check_command_data(self, command_data: Dict[str, Any]) -> None:
+    def _check_command_data(self, command_data: Dict[str, Any]) -> List[str]:
         """
         :param command_data: dictionary with fields of the command to be checked.
+        :return: message case which is suitable fot given command data.
         """
 
         message_cases = self._get_command_cases(command_data["name"])
-        total_missing_fields = dict()
         min_missing_fields = None
         for message_case in message_cases[::-1]:
             missing_fields = []
@@ -63,13 +59,13 @@ class APDU:
                     missing_fields.append(field)
 
             if missing_fields:
-                total_missing_fields[",".join(message_case)] = missing_fields
                 if min_missing_fields is None or len(missing_fields) < len(min_missing_fields):
                     min_missing_fields = missing_fields
+            else:
+                return message_case
 
-        if len(total_missing_fields) == len(message_cases):
-            raise IncorrectDataException(f"There are not enough fields for the '{command_data['name']}' command: "
-                                         f"{', '.join(min_missing_fields)}")
+        raise IncorrectDataException(f"There are not enough fields for the '{command_data['name']}' command: "
+                                     f"{', '.join(min_missing_fields)}")
 
     def _check_command_name(self, command_data: Dict[str, Any]) -> None:
         """
@@ -106,27 +102,20 @@ class APDU:
         """
 
         for key, value in command_data.items():
-            if (key in self.header or key in self.body) and isinstance(value, str):
+            if key in self.message_structure and isinstance(value, str):
                 try:
                     command_data[key] = int(value, base=16)
                 except ValueError as exc:
                     logger.error("Failed to convert '%s' field: %s", key, exc)
 
-    def _encode_body(self, command_data: Dict[str, Any]) -> bytes:
+    def _encode(self, message_case: List[str], command_data: Dict[str, Any]) -> bytes:
         """
+        :param message_case:
         :param command_data: dictionary with fields of the command to be encoded.
         :return: encoded command body.
         """
 
-        return encode(self.body, command_data)
-
-    def _encode_header(self, command_data: Dict[str, Any]) -> bytes:
-        """
-        :param command_data: dictionary with fields of the command to be encoded.
-        :return: encoded command header.
-        """
-
-        return encode(self.header, command_data)
+        return encode(message_case, self.message_structure, command_data)
 
     def _get_command_cases(self, command_name: str) -> List[List[str]]:
         """
@@ -153,7 +142,15 @@ class APDU:
 
         return None
 
-    def encode_command(self, command_data: Dict[str, Any]) -> bytes:
+    def _get_message_case_index(self, message_case: List[str]) -> int:
+        """
+        :param message_case:
+        :return:
+        """
+
+        return self.message_cases.index(message_case) + 1
+
+    def encode_command(self, command_data: Dict[str, Any]) -> Tuple[bytes, int]:
         """
         :param command_data: dictionary with fields of the command to be encoded.
         :return: encoded command.
@@ -161,21 +158,21 @@ class APDU:
 
         self._convert_command_data_to_int(command_data)
         self._check_command_name(command_data)
-        self._check_command_data(command_data)
+        message_case = self._check_command_data(command_data)
         logger.info("'%s' command encoding...", command_data["name"])
-        return self._encode_header(command_data) + self._encode_body(command_data)
+        return self._encode(message_case, command_data), self._get_message_case_index(message_case)
 
 
-def encode(fields: Dict[str, Any], command_data: Dict[str, Any]) -> bytes:
+def encode(message_case: List[str], fields: Dict[str, Any], command_data: Dict[str, Any]) -> bytes:
     """
+    :param message_case:
     :param fields:
     :param command_data: dictionary with fields of the command to be encoded.
     :return: encoded message.
     """
 
     encoded_values = []
-    for name, description in fields.items():
-        if name in command_data:
-            value = command_data[name]
-            encoded_values.append(value.to_bytes(description["length"], "big"))
+    for field in message_case:
+        value = command_data[field]
+        encoded_values.append(value.to_bytes(fields[field]["length"], "big"))
     return b"".join(encoded_values)

@@ -8,7 +8,8 @@ def run(input_file: Optional[str], csv: bool, t0: bool) -> None:
     """
     :param input_file: path to the json file with command names and parameters;
     :param csv: if True, then the output data should be output in CSV format;
-    :param t0: if True, then you need to use the character based transmission protocol.
+    :param t0: if True, then the character based transmission protocol should be used. Otherwise, the block based
+    transmission protocol will be used.
     """
 
     if input_file is not None:
@@ -19,7 +20,8 @@ def run_console(input_file: str, csv: bool, t0: bool) -> None:
     """
     :param input_file: path to the json file with command names and parameters;
     :param csv: if True, then the output data should be output in CSV format;
-    :param t0: if True, then you need to use the character based transmission protocol.
+    :param t0: if True, then the character based transmission protocol should be used. Otherwise, the block based
+    transmission protocol will be used.
     """
 
     generator = UICCGenerator()
