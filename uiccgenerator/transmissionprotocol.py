@@ -10,7 +10,8 @@ class TransmissionProtocol:
     def __init__(self, t0: bool, info_field_size: int = 32) -> None:
         """
         :param t0: if True, then the character based transmission protocol should be used. Otherwise, the block based
-        transmission protocol will be used.
+        transmission protocol will be used;
+        :param info_field_size: maximum length of the information field of blocks that can be received by the UICC.
         """
 
         self._info_field_size: int = max(1, min(info_field_size, TransmissionProtocol.MAX_INFO_FIELD_SIZE))
@@ -18,8 +19,8 @@ class TransmissionProtocol:
 
     def _convert_for_t1(self, data: bytes) -> bytes:
         """
-        :param data:
-        :return:
+        :param data: bytes to be converted by Transmission Protocol.
+        :return: converted bytes.
         """
 
         blocks = []
@@ -42,8 +43,8 @@ class TransmissionProtocol:
 
     def convert(self, data: bytes) -> bytes:
         """
-        :param data:
-        :return:
+        :param data: bytes to be converted by Transmission Protocol.
+        :return: converted bytes.
         """
 
         if self._t0:
