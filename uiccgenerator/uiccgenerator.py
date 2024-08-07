@@ -19,7 +19,8 @@ class UICCGenerator:
         :param input_data: dictionary with command data to be encoded.
         """
 
-        for command_data in input_data.get("commands", []):
+        for i, command_data in enumerate(input_data.get("commands", []), start=1):
+            logger.info("Command #%d encoding...", i)
             try:
                 encoded_command = self._apdu.encode_command(command_data)
                 logger.info("Encoded command: %s", encoded_command)
