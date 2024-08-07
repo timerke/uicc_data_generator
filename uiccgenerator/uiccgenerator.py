@@ -7,14 +7,16 @@ logger = logging.getLogger("uicc_generator")
 
 
 class UICCGenerator:
+    """
+    Class for working with data for UICC-Terminal interface.
+    """
 
     def __init__(self) -> None:
         self._apdu: APDU = APDU()
 
-    def _encode_input_data(self, input_data) -> bytes:
+    def _encode_input_data(self, input_data) -> None:
         """
-        :param input_data:
-        :return:
+        :param input_data: dictionary with command data to be encoded.
         """
 
         for command_data in input_data.get("commands", []):
