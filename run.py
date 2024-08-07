@@ -24,8 +24,8 @@ def run_console(input_file: str, csv: bool, t0: bool) -> None:
     transmission protocol will be used.
     """
 
-    generator = UICCGenerator()
-    generator.run(input_file, csv, t0)
+    generator = UICCGenerator(t0)
+    generator.run(input_file, csv)
 
 
 if __name__ == "__main__":
