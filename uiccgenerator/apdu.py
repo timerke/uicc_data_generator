@@ -186,5 +186,6 @@ def encode(message_case: List[str], fields: Dict[str, Any], command_data: Dict[s
     encoded_values = []
     for field in message_case:
         value = command_data[field]
-        encoded_values.append(value.to_bytes(fields[field]["length"], "big"))
+        length = command_data["Lc"] if fields[field]["length"] == "Lc" else fields[field]["length"]
+        encoded_values.append(value.to_bytes(length, "big"))
     return b"".join(encoded_values)

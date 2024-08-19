@@ -1,5 +1,6 @@
 import csv
 import logging
+import sys
 from typing import Any, Dict, List
 from . import utils as ut
 from .apdu import APDU
@@ -53,7 +54,7 @@ class UICCGenerator:
                     print(byte)
                 total_bits.append(embedded_bytes)
             except Exception as exc:
-                logger.error("%s", exc)
+                logger.error("%s", exc, exc_info=sys.exc_info())
         return total_bits
 
     @staticmethod
