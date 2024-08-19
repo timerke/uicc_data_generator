@@ -2,14 +2,23 @@ from typing import List
 
 
 class DataLinkLayer:
+    """
+    Class for working as Data link layer.
+    """
 
     def __init__(self, direct_convention: bool = True) -> None:
+        """
+        :param direct_convention: depending upon the convention used, the logical '1' in a character is either
+        represented by state H on the I/O line, direct convention, or state L on the I/O line, inverse convention.
+        """
+
         self._start_bit: int = 0 if direct_convention else 1
 
-    def _embed_character_frame(self, byte: int) -> List[int]:
+    @staticmethod
+    def _embed_character_frame(byte: int) -> List[int]:
         """
-        :param byte:
-        :return:
+        :param byte: the value of the byte to be wrapped in bits.
+        :return: list of bits (leading bit, bits of the given byte and parity bit).
         """
 
         units_number = get_number_of_one_bits(byte)
@@ -18,18 +27,20 @@ class DataLinkLayer:
 
     def embed_character_frames(self, data: bytes) -> List[List[int]]:
         """
-        :param data:
-        :return:
+        :param data: an array of bytes, each of which needs to be wrapped in a leading bit and a parity bit.
+        :return: list of bits to which the given byte array is converted.
         """
 
         embedded_bytes = [self._embed_character_frame(byte) for byte in data]
-        print("Character framed bytes:")
-        for byte in embedded_bytes:
-            print(byte)
         return embedded_bytes
 
 
 def convert_byte(byte: int) -> List[int]:
+    """
+    :param byte: byte value.
+    :return: representation of a byte as a list of bits.
+    """
+
     bits_number = 8
     bits = []
     for _ in range(bits_number):
@@ -39,6 +50,11 @@ def convert_byte(byte: int) -> List[int]:
 
 
 def get_number_of_one_bits(byte: int) -> int:
+    """
+    :param byte: byte value.
+    :return: number of bit units in a byte.
+    """
+
     bits_number = 8
     units_number = 0
     for _ in range(bits_number):
