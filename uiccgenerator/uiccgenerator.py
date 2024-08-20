@@ -77,7 +77,8 @@ class UICCGenerator:
         :param input_file: path to the CSV-file with bits.
         """
 
-        pass
+        bits = ut.read_csv(input_file)
+        print(bits)
 
     def encode(self, input_file: str) -> None:
         """
