@@ -72,9 +72,16 @@ class UICCGenerator:
                         writer.writerow([bit])
             logger.info("Bits written to file '%s'", UICCGenerator.CSV_FILE)
 
-    def run(self, input_file: str) -> None:
+    def decode(self, input_file: str) -> None:
         """
-        :param input_file: path to the json file with command names and parameters.
+        :param input_file: path to the CSV-file with bits.
+        """
+
+        pass
+
+    def encode(self, input_file: str) -> None:
+        """
+        :param input_file: path to the JSON-file with command names and parameters.
         """
 
         input_data = ut.read_json(input_file)
