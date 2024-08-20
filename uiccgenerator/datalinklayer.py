@@ -34,6 +34,21 @@ class DataLinkLayer:
         embedded_bytes = [self._embed_character_frame(byte) for byte in data]
         return embedded_bytes
 
+    @staticmethod
+    def remove_character_frames(bits: List[int]) -> List[int]:
+        """
+        :param bits: list of bits from which to remove leading bit and parity bit.
+        :return: list of bits without leading bit and parity bit.
+        """
+
+        if bits[0] != 1:
+            raise ValueError("No leading bit 1")
+
+        if bits[:-1].count(1) % 2 != bits[-1]:
+            raise ValueError("Invalid parity bit")
+
+        return bits[1:-1]
+
 
 def convert_byte(byte: int) -> List[int]:
     """

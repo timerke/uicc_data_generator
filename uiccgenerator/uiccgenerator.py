@@ -32,6 +32,28 @@ class UICCGenerator:
         self._tpdu: TPDU = TPDU(t0)
         self._transmission: TransmissionProtocol = TransmissionProtocol(t0)
 
+    def _decode_bits(self, bits: List[int]) -> None:
+        """
+        :param bits: list of bits.
+        """
+
+        bits_to_decode = []
+        bit_count = 0
+        for bit in bits:
+            bit_count += 1
+            bits_to_decode.append(bit)
+            if bit_count < 10:
+                continue
+
+            try:
+                bits_without_frame = self._data_link_layer.remove_character_frames(bits_to_decode)
+            except Exception as exc:
+                logger.error("%s", exc, exc_info=sys.exc_info())
+                return
+
+            bits_to_decode = []
+            bit_count = 0
+
     def _encode_input_data(self, input_data: Dict[str, Any]) -> List[List[List[int]]]:
         """
         :param input_data: dictionary with command data to be encoded.
@@ -78,7 +100,7 @@ class UICCGenerator:
         """
 
         bits = ut.read_csv(input_file)
-        print(bits)
+        self._decode_bits(bits)
 
     def encode(self, input_file: str) -> None:
         """
