@@ -46,7 +46,7 @@ class UICCGenerator:
                 continue
 
             try:
-                bits_without_frame = self._data_link_layer.remove_character_frames(bits_to_decode)
+                byte_without_frame = self._data_link_layer.remove_character_frames(bits_to_decode)
             except Exception as exc:
                 logger.error("%s", exc, exc_info=sys.exc_info())
                 return
@@ -68,7 +68,7 @@ class UICCGenerator:
                 logger.info("Bytes after APDU: %s", apdu_encoded_command)
                 tpdu_mapped_command = self._tpdu.map_bytes_from_apdu(apdu_encoded_command, message_case)
                 logger.info("Bytes after TPDU: %s", tpdu_mapped_command)
-                trans_converted_command = self._transmission.convert(tpdu_mapped_command)
+                trans_converted_command = self._transmission.encode(tpdu_mapped_command)
                 logger.info("Bytes after Transmission Protocol: %s", trans_converted_command)
                 embedded_bytes = self._data_link_layer.embed_character_frames(trans_converted_command)
                 logger.info("Character framed bytes:")

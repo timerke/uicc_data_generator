@@ -17,10 +17,10 @@ class TransmissionProtocol:
         self._info_field_size: int = max(1, min(info_field_size, TransmissionProtocol.MAX_INFO_FIELD_SIZE))
         self._t0: bool = t0
 
-    def _convert_for_t1(self, data: bytes) -> bytes:
+    def _encode_for_t1(self, data: bytes) -> bytes:
         """
         :param data: bytes to be converted by Transmission Protocol.
-        :return: converted bytes.
+        :return: encoded bytes.
         """
 
         blocks = []
@@ -41,13 +41,13 @@ class TransmissionProtocol:
 
         return b"".join(blocks)
 
-    def convert(self, data: bytes) -> bytes:
+    def encode(self, data: bytes) -> bytes:
         """
         :param data: bytes to be converted by Transmission Protocol.
-        :return: converted bytes.
+        :return: encoded bytes.
         """
 
         if self._t0:
             return data
 
-        return self._convert_for_t1(data)
+        return self._encode_for_t1(data)
